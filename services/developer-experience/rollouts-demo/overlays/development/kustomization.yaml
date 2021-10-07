@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: default
 bases:
   - ../../base
-
 images:
   - name: argoproj/rollouts-demo
-    newTag: green
+    newTag: purple
