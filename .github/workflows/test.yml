@@ -4,7 +4,9 @@ on:
   pull_request:
   push:
     branches:
-      - 'main'
+      - main
+  workflow_run:
+    workflows: [New Image Tag]
 
 jobs:
   test:
