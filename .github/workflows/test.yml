@@ -23,7 +23,7 @@ jobs:
             kustomize build ./services/developer-experience/rollouts-demo/overlays/development | kubeval --strict --skip-kinds Rollout
             kustomize build ./services/developer-experience/rollouts-demo/overlays/development | conftest test -p .github/policy -
 
-  release:
+  dry-run:
     runs-on: ubuntu-latest
     needs: [test]
     if: ${{ github.ref == 'refs/heads/main' }}
@@ -38,8 +38,23 @@ jobs:
           personalAccessToken: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           clusterName: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
 
-      - name: Get nodes
-        run: kubectl get nodes
+      - name: Diff kustomization
+        run: kubectl diff -k ./services/developer-experience/rollouts-demo/overlays/development
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [dry-run]
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - run: echo "Deploying to on branch $GITHUB_REF"
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up kubectl
+        uses: matootie/dokube@v1.3.4
+        with:
+          personalAccessToken: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          clusterName: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
 
       - name: Apply kustomization
         run: kubectl apply -k ./services/developer-experience/rollouts-demo/overlays/development
