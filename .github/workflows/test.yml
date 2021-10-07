@@ -31,12 +31,12 @@ jobs:
       - run: echo "Deploying to on branch $GITHUB_REF"
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install doctl
-        uses: digitalocean/action-doctl@v2
+
+      - name: Set up kubectl
+        uses: matootie/dokube@v1.3.4
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      - name: Save DigitalOcean kubeconfig with short-lived credentials
-        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.DIGITALOCEAN_CLUSTER_ID }}
+          personalAccessToken: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          clusterName: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
 
       - name: Get nodes
         run: kubectl get nodes
