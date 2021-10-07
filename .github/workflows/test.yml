@@ -31,13 +31,6 @@ jobs:
       - run: echo "Deploying to on branch $GITHUB_REF"
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: azure/k8s-set-context@v1
-        id: setcontext
-        with:
-          method: kubeconfig
-          kubeconfig: <your kubeconfig> # Use secret (https://developer.github.com/actions/managing-workflows/storing-secrets/)
-          context: <context name>  #If left unspecified, current-context from kubeconfig is used as default
-
       - name: Apply kustomization
         uses: stefanprodan/kube-tools@7cad6034ae7905a72e9454dd1f91d93dd79c996a
         env:
