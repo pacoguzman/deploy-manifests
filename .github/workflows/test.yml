@@ -31,12 +31,26 @@ jobs:
       - run: echo "Deploying to on branch $GITHUB_REF"
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Apply kustomization
+      - name: K8S get current-context
         uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
           KUBE_CONTEXT: ${{ secrets.KUBE_CONTEXT }}
-        run: |
-          kubectl config current-context
-          kubectl get nodes
-          kubectl apply -k ./services/developer-experience/rollout-demo/overlays/development
+        with:
+          args: config current-context
+
+      - name: K8S get nodes
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+          KUBE_CONTEXT: ${{ secrets.KUBE_CONTEXT }}
+        with:
+          args: get nodes
+
+      - name: K8S apply
+        uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+          KUBE_CONTEXT: ${{ secrets.KUBE_CONTEXT }}
+        with:
+          args: apply -k ./services/developer-experience/rollout-demo/overlays/development
