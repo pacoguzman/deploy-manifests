@@ -1,0 +1,54 @@
+name: New Image Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      ship:
+        description: "Ship owner of the service"
+        required: true
+      service:
+        description: "Service to update"
+        required: true
+      environment:
+        description: "Environment to update"
+        required: true
+      tag:
+        description: "Service tag"
+        required: true
+
+jobs:
+  new_image_tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Update Image Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          kustomization_path=services/${{ github.event.inputs.ship }}/${{ github.event.inputs.service }}/overlays/${{ github.event.inputs.environment }}/kustomization.yaml
+          echo "About to update $kustomization_path file with ${{ github.event.inputs.tag }}"
+          yq eval '.images[0].newTag = "${{ github.event.inputs.tag }}"' --inplace $kustomization_path
+      - name: Create AutoMerge PR
+        id: cpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: New image tag for ${{ github.event.inputs.ship }}/${{ github.event.inputs.service }} on ${{ github.event.inputs.environment }}
+          branch: gh-pr
+          branch-suffix: short-commit-hash
+          delete-branch: true
+          title: '[${{ github.event.inputs.ship }}/${{ github.event.inputs.service }}] Update image on ${{ github.event.inputs.environment }}'
+          body: |
+            Update image
+            - Ship: ${{ github.event.inputs.ship }}
+            - Service: ${{ github.event.inputs.service }}
+            - Environment: ${{ github.event.inputs.environment }}
+            - Tag: ${{ github.event.inputs.tag }}
+          labels: |
+            automated pr
+
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
