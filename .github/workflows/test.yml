@@ -26,7 +26,6 @@ jobs:
   dry-run:
     runs-on: ubuntu-latest
     needs: [test]
-    if: ${{ github.ref == 'refs/heads/main' }}
     steps:
       - run: echo "Deploying to on branch $GITHUB_REF"
       - name: Checkout
@@ -39,7 +38,16 @@ jobs:
           clusterName: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
 
       - name: Diff kustomization
-        run: kubectl diff -k ./services/developer-experience/rollouts-demo/overlays/development
+        run: |
+          set +e
+          diff=$(kubectl diff -k ./services/developer-experience/rollouts-demo/overlays/development)
+          exit_code=$?
+          set -e
+          case $exit_code in
+            0) printf '%s\n' "No differeneces"; exit 0;;
+            1) printf '%s\n' "Found differeneces\n$diff"; exit 0;;
+            *) exit $exit_code
+          esac
 
   release:
     runs-on: ubuntu-latest
