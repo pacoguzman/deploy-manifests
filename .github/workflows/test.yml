@@ -38,7 +38,14 @@ jobs:
           clusterName: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
 
       - name: Diff kustomization
-        run: kubectl diff -k ./services/developer-experience/rollouts-demo/overlays/development
+        run: |
+          kubectl diff -k ./services/developer-experience/rollouts-demo/overlays/development; exit_code=$?
+          echo $exit_code
+          case $exit_code in
+            0) printf '%s\n' "No differeneces"; exit 0;;
+            1) printf '%s\n' "Found differeneces"; exit 0;;
+            *) exit $exit_code
+          esac
 
   release:
     runs-on: ubuntu-latest
