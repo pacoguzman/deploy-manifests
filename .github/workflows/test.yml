@@ -31,26 +31,15 @@ jobs:
       - run: echo "Deploying to on branch $GITHUB_REF"
       - name: Checkout
         uses: actions/checkout@v2
-      - name: K8S get current-context
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-          KUBE_CONTEXT: ${{ secrets.KUBE_CONTEXT }}
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
         with:
-          args: config current-context
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.DIGITALOCEAN_CLUSTER_ID }}
 
-      - name: K8S get nodes
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-          KUBE_CONTEXT: ${{ secrets.KUBE_CONTEXT }}
-        with:
-          args: get nodes
+      - name: Get nodes
+        run: kubectl get nodes
 
-      - name: K8S apply
-        uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-          KUBE_CONTEXT: ${{ secrets.KUBE_CONTEXT }}
-        with:
-          args: apply -k ./services/developer-experience/rollout-demo/overlays/development
+      - name: Apply kustomization
+        run: kubectl apply -k ./services/developer-experience/rollout-demo/overlays/development
