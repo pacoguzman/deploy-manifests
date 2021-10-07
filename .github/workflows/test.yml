@@ -1,0 +1,32 @@
+name: test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # - name: Validate Helm chart
+      #   uses: stefanprodan/kube-tools@v1
+      #   with:
+      #     kubectl: 1.19.11
+      #     helm: 2.17.0
+      #     helmv3: 3.6.0
+      #     command: |
+      #       helmv3 template ./charts/podinfo | kubeval --strict --kubernetes-version 1.19.11 --schema-location https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master
+      - name: Validate kustomization
+        uses: stefanprodan/kube-tools@v1
+        with:
+          kubectl: 1.21.3
+          kustomize: 4.4.0
+          kubeval: 0.15.0
+          conftest: 0.28.1
+          command: |
+            kustomize build ./services/developer-experience/rollout-demo/overlays/development | kubeval --strict --kubernetes-version 1.19.11 --schema-location https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master
+            kustomize build ./services/developer-experience/rollout-demo/overlays/development | conftest test -p .github/policy -
