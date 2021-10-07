@@ -20,8 +20,8 @@ jobs:
           kubeval: 0.15.0
           conftest: 0.28.1
           command: |
-            kustomize build ./services/developer-experience/rollout-demo/overlays/development | kubeval --strict --skip-kinds Rollout
-            kustomize build ./services/developer-experience/rollout-demo/overlays/development | conftest test -p .github/policy -
+            kustomize build ./services/developer-experience/rollouts-demo/overlays/development | kubeval --strict --skip-kinds Rollout
+            kustomize build ./services/developer-experience/rollouts-demo/overlays/development | conftest test -p .github/policy -
 
   release:
     runs-on: ubuntu-latest
@@ -42,4 +42,4 @@ jobs:
         run: kubectl get nodes
 
       - name: Apply kustomization
-        run: kubectl apply -k ./services/developer-experience/rollout-demo/overlays/development
+        run: kubectl apply -k ./services/developer-experience/rollouts-demo/overlays/development
