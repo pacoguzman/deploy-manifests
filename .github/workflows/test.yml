@@ -40,7 +40,7 @@ jobs:
       - name: Diff kustomization
         run: |
           set +e
-          diff=$(kubectl diff --server-side=true -k ./services/developer-experience/rollouts-demo/overlays/development)
+          diff=$(kubectl diff -k ./services/developer-experience/rollouts-demo/overlays/development)
           exit_code=$?
           set -e
           case $exit_code in
