@@ -32,17 +32,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Apply kustomization
-        uses: stefanprodan/kube-tools@7cad6034ae7905a72e9454dd1f91d93dd79c996a
+        uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
           KUBE_CONTEXT: ${{ secrets.KUBE_CONTEXT }}
-        with:
-          kubectl: 1.21.3
-          kustomize: 4.4.0
-          command: |
-            mkdir -p '${{ github.workspace }}/.kube' \
-              && echo '${{ secrets.KUBE_CONFIG}}' | base64 -d > ${{ github.workspace }}/.kube/config
-            kubectl config set-context $KUBE_CONTEXT
-            kubectl config current-context
-            kubectl get nodes
-            kustomize build ./services/developer-experience/rollout-demo/overlays/development | kubectl apply -f-
+        run: |
+          kubectl config current-context
+          kubectl get nodes
+          kubectl apply -k ./services/developer-experience/rollout-demo/overlays/development
