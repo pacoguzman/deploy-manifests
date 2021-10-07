@@ -40,6 +40,7 @@ jobs:
           kubectl: 1.21.3
           kustomize: 4.4.0
           command: |
+            kubectl config set-context $KUBE_CONTEXT
             kubectl config current-context
             kubectl get nodes
             kustomize build ./services/developer-experience/rollout-demo/overlays/development | kubectl apply -f-
