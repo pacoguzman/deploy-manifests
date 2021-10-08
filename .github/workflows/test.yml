@@ -60,7 +60,8 @@ jobs:
     steps:
       - name: Merge PR
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}"
           PR: ${{ github.event.pull_request.number }}"
         run: |
           echo "Merging PR #${{ github.event.pull_request.number }}"
