@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: argo-rollouts
+  labels:
+    app: argo-rollouts
+spec:
+  selector:
+    app: argo-rollouts

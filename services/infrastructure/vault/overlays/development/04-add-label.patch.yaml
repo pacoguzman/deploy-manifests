@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: vault-agent-injector-svc
+  labels:
+    app: vault-agent-injector
+spec:
+  selector:
+    app: vault-agent-injector

@@ -3,3 +3,8 @@ kind: Kustomization
 namespace: argo
 bases:
   - ../../base
+images:
+  - name: quay.io/argoproj/argocli
+    newTag: v3.2.0-rc6
+  - name: quay.io/argoproj/workflow-controller
+    newTag: v3.2.0-rc6
