@@ -30,7 +30,7 @@ jobs:
           conftest: '0.28.1'
       - name: Validate kustomization
         run: |
-          find . -path "services/**/overlays/development" -type d -print0 | while read -d $'\0' dir
+          find . -path "./services/**/overlays/development" -type d -print0 | while read -d $'\0' dir
           do
             echo "::group:: Testing $dir"
             kustomize build $dir | kubeval --strict --skip-kinds Rollout
