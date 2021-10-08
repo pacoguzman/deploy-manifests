@@ -33,7 +33,7 @@ jobs:
           find . -path "./services/**/overlays/development" -type d -print0 | while read -d $'\0' dir
           do
             echo "::group:: Testing $dir"
-            kustomize build $dir | kubeval --strict --skip-kinds Rollout
+            kustomize build $dir | kubeval --strict --ignore-missing-schemas --skip-kinds Rollout
             kustomize build $dir | conftest test -p .github/policy -
             echo "::endgroup:: Testing $dir"
           done
