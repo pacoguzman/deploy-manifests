@@ -32,9 +32,10 @@ jobs:
         run: |
           find . -path "services/**/overlays/development" -type d -print0 | while read -d $'\0' dir
           do
-            echo "Testing $dir"
+            echo "::group:: Testing $dir"
             kustomize build $dir | kubeval --strict --skip-kinds Rollout
             kustomize build $dir | conftest test -p .github/policy -
+            echo "::endgroup:: Testing $dir"
           done
   dry-run:
     runs-on: ubuntu-latest
