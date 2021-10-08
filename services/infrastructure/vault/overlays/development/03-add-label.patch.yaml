@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-agent-injector-svc
+  labels:
+    app: vault-agent-injector
+spec:
+  selector:
+    matchLabels:
+      app: vault-agent-injector

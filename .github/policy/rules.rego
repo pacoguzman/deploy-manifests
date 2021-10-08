@@ -28,7 +28,7 @@ match_labels {
 deny[msg] {
   kubernetes.is_deployment
   not match_labels
-  msg = sprintf("Service %s should set app label selector", [name])
+  msg = sprintf("Deployment %s should set app label selector", [name])
 }
 
 # Warn if deployments have no prometheus pod annotations

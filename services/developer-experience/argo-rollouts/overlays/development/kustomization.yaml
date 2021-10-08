@@ -3,3 +3,10 @@ kind: Kustomization
 namespace: argo-rollouts
 bases:
   - ../../base
+patches:
+  - path: 01-add-annotations.patch.yaml
+    target:
+      labelSelector: "app.kubernetes.io/name=argo-rollouts"
+  - path: 01-add-label.patch.yaml
+  #- path: 02-add-label.patch.yaml
+  - path: 03-add-label.patch.yaml
