@@ -1,53 +1,23 @@
-#
+# Deploy Manifests
 
-## SetUp CRDs
+This repository try to adhere to GitOps methodology following these concepts:
 
-### Argo Rollouts
+- Infrastructure as Code: Git is always the source of truth on what happens in the system
+- Code changes always go through an automated process
+- Deployments, tests, and rollbacks controlled through Git flow
+- Integration with secrets providers
+- No hand-rolled deployments: If you want to change the state you need to perform a Git operation such as creating a commit or opening a pull request
 
-Controller installation - https://argoproj.github.io/argo-rollouts/installation/#controller-installation
+## Architecture
 
-```sh
-kubectl create namespace argo-rollouts
-kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
-```
+## User flows
 
-Kubectl plugin installation - https://argoproj.github.io/argo-rollouts/installation/#kubectl-plugin-installation
+1. Register a new service
 
-### Argo Workfflows
+Currently, the build platform team will help to register new services describing the whole process in [register a new service](./flows/register-a-new-service.md)
 
+TODO: Automatize
 
-Manifests installation
+2. Release a new version
 
-```sh
-kubectl create namespace argo
-kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo-workflows/master/manifests/quick-start-postgres.yaml
-```
-
-And following https://towardsdatascience.com/creating-containerized-workflows-with-argo-ec1011b04370
-
-```sh
-kubectl port-forward -n argo svc/argo-server 2746:2746
-```
-
-```sh
-open https://localhost:2746
-```
-
-
-### Vault - https://learn.hashicorp.com/tutorials/vault/kubernetes-raft-deployment-guide?in=vault/kubernetes
-
-Just to play with secretGenerators inside kustomize
-
-```sh
-kubectl create namespace vault
-helm template vault hashicorp/vault --namespace vault --include-crds > services/infrastructure/vault/base/install.yaml
-kubectl apply -k services/infrastructure/vault/overlays/development
-```
-
-```sh
-kubectl port-forward -n vault vault-0 8200:8200
-```
-
-```sh
-open http://localhost:8200
-```
+To release a new version of an already registered service, users should follow the process describe in [release a new version](./flows/release-a-new-version.md)
