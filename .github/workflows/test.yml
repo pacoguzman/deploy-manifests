@@ -53,6 +53,16 @@ jobs:
             *) exit $exit_code
           esac
 
+  auto-merge:
+    runs-on: ubuntu-latest
+    needs: [dry-run]
+    if: ${{ github.event_name == 'pull_request' && startsWith(github.event.pull_request.head.ref, 'gh-pr-') }}
+    steps:
+      - name: Merge PR
+        run: |
+          echo "Merging PR #${{ github.event.pull_request.number }}"
+          gh merge pr ${{ github.event.pull_request.number }} --auto
+
   release:
     runs-on: ubuntu-latest
     needs: [dry-run]
