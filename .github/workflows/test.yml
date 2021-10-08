@@ -61,8 +61,8 @@ jobs:
       - name: Merge PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}"
-          PR: ${{ github.event.pull_request.number }}"
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
         run: |
           echo "Merging PR #${{ github.event.pull_request.number }}"
           gh pr merge $PR --merge --auto
