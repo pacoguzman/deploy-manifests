@@ -33,7 +33,11 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # NOTE: this is a limitation on GitHub so in this way created pull requests will run their own defined workflows
+          # the other options to explore
+          #  - is to listen to `workflow_run` events but in that case we have no data about the PR opened
+          #  - is to through a repository_dispatch event with the PR recently created and listen to that event
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           commit-message: New image tag for ${{ github.event.inputs.ship }}/${{ github.event.inputs.service }} on ${{ github.event.inputs.environment }}
           branch: gh-pr
           branch-suffix: short-commit-hash

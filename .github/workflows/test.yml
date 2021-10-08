@@ -1,14 +1,6 @@
 name: Test
 
-on:
-  pull_request:
-  push:
-    branches:
-      - main
-  workflow_run:
-    workflows: [New Image Tag]
-    types:
-      - completed
+on: [pull_request, push]
 
 jobs:
   debug:
