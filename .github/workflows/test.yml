@@ -7,8 +7,18 @@ on:
       - main
   workflow_run:
     workflows: [New Image Tag]
+    types:
+      - completed
 
 jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print github context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
   test:
     runs-on: ubuntu-latest
     steps:
