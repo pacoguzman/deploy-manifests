@@ -95,4 +95,11 @@ jobs:
           clusterName: ${{ secrets.DIGITALOCEAN_CLUSTER_NAME }}
 
       - name: Apply kustomization
-        run: kubectl apply -k ./services/developer-experience/rollouts-demo/overlays/development
+        run: |
+          find . -path "./services/**/overlays/development" -type d -print0 | while read -d $'\0' dir
+          do
+            echo "::group:: Applying $dir"
+            kubectl apply -k $dir
+            echo "::endgroup:: Applying $dir"
+          done
+          true
