@@ -31,7 +31,7 @@ jobs:
       - name: Validate kustomization
         # Note: enable --strict on kubeval
         run: |
-          find . -path "./services/**/overlays/development" -type d -print0 | while read -d $'\0' dir
+          find . -path "./services/**/overlays/development" -not -path "./services/infrastructure/istio" -not -path "./services/infrastructure/kube-prometheus" -type d -print0 | while read -d $'\0' dir
           do
             echo "::group:: Testing $dir"
             kustomize build $dir | kubeval --ignore-missing-schemas --skip-kinds Rollout
@@ -96,7 +96,7 @@ jobs:
 
       - name: Apply kustomization
         run: |
-          find . -path "./services/**/overlays/development" -type d -print0 | while read -d $'\0' dir
+          find . -path "./services/**/overlays/development" -not -path "./services/infrastructure/istio" -not -path "./services/infrastructure/kube-prometheus" -type d -print0 | while read -d $'\0' dir
           do
             echo "::group:: Applying $dir"
             kubectl apply -k $dir

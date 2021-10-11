@@ -81,3 +81,24 @@ $> kubectl get services -n istio-system
 ```sh
 $> kubectl get pods -n istio-system
 ```
+
+### kube-prometheus
+
+Get customized manifests to start simple
+
+```sh
+git clone git clone https://github.com/prometheus-operator/kube-prometheus.git ~/dev/github/prometheus-operator/kube-prometheus
+```
+
+```sh
+cp ~/dev/github/prometheus-operator/kube-prometheus/kustomization.yaml services/infrastructure/kube-prometheus/base
+cp -R ~/dev/github/prometheus-operator/kube-prometheus/manifests/ services/infrastructure/kube-prometheus/base/manifests/
+```
+
+Install kustomized manifests
+
+```sh
+kubectl apply -f services/infrastructure/kube-prometheus/base/manifests/setup
+until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
+kubectl apply -f services/infrastructure/kube-prometheus/base/manifests/
+```
