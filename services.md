@@ -51,3 +51,33 @@ kubectl port-forward -n vault vault-0 8200:8200
 ```sh
 open http://localhost:8200
 ```
+
+### Istio
+
+```sh
+brew install istioctl
+```
+
+```sh
+istioctl operator init
+```
+
+```sh
+$> istioctl profile dump demo
+```
+
+We define the IstioOperator that we can apply to the cluster
+
+```sh
+$> kubectl apply -k services/infrastructure/istio/overlays/development
+```
+
+Check if it's working fine
+
+```sh
+$> kubectl get services -n istio-system
+```
+
+```sh
+$> kubectl get pods -n istio-system
+```
