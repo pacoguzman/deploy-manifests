@@ -102,3 +102,45 @@ kubectl apply -f services/infrastructure/kube-prometheus/base/manifests/setup
 until kubectl get servicemonitors --all-namespaces ; do date; sleep 1; echo ""; done
 kubectl apply -f services/infrastructure/kube-prometheus/base/manifests/
 ```
+
+Compiling as we need to add istio-system as namespace to monitor so we learn how to do it
+
+```sh
+jb install github.com/prometheus-operator/kube-prometheus/jsonnet/kube-prometheus@main
+```
+
+
+Dashboards
+
+```sh
+kubectl --namespace monitoring port-forward svc/grafana 3000
+# admin:admin
+kubectl --namespace monitoring port-forward svc/prometheus-k8s 9090
+kubectl --namespace monitoring port-forward svc/alertmanager-main 9093
+```
+
+### Operators
+
+```sh
+curl -sL https://github.com/operator-framework/operator-lifecycle-manager/releases/download/v0.19.1/install.sh | bash -s v0.19.1
+```
+
+Install OLM on the cluster to be able to use operators to smooth release for example with Kiali
+
+### Kiali
+
+[Operator](https://kiali.io/documentation/v1.41/installation-guide/installing-with-operatorhub/)
+
+Installing operator
+
+```sh
+kubectl create -f https://operatorhub.io/install/kiali.yaml
+```
+
+Getting default kiali_cr.yaml from https://github.com/kiali/kiali-operator/blob/master/deploy/kiali/kiali_cr.yaml
+
+Accessing Dashboard
+
+```sh
+kubectl port-forward svc/kiali 20001:20001 -n istio-system
+```
