@@ -1,0 +1,29 @@
+- op: add
+  path: /spec
+  value:
+    installation-tag: Kiali
+- op: add
+  path: /spec/auth
+  value:
+    strategy: anonymous
+- op: add
+  path: /spec/prometheus
+  value:
+    health_check_url: "http://prometheus-k8s.monitoring:9090/-/healthy"
+    url: "http://prometheus-k8s.monitoring:9090"
+- op: add
+  path: /spec/grafana
+  value:
+    health_check_url: "http://grafana.monitoring:3000/api/health"
+    url: "http://grafana.monitoring:3000"
+- op: add
+  path: /spec/external_services
+  value:
+    prometheus:
+      health_check_url: "http://prometheus-k8s.monitoring:9090/-/healthy"
+      url: "http://prometheus-k8s.monitoring:9090"
+    grafana:
+      health_check_url: "http://grafana.monitoring:3000/api/health"
+      url: "http://grafana.monitoring:3000"
+    jaeger:
+      enabled: false

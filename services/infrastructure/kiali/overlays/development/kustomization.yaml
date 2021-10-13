@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: istio-system
+bases:
+  - ../../base
+patches:
+- path: kiali_cr-patch.yaml
+  target:
+    group: kiali.io
+    version: v1alpha1
+    kind: Kiali
+    name: kiali
