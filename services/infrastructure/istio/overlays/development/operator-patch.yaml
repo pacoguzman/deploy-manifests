@@ -1,0 +1,12 @@
+- op: add
+  path: /spec/meshConfig/defaultConfig
+  value:
+    proxyStatsMatcher:
+        inclusionRegexps:
+          - ".*circuit_breakers.*"
+        inclusionPrefixes:
+          - "downstream_cx"
+          - "downstream_rq"
+          - "upstream_rq"
+          - "upstream_cx"
+

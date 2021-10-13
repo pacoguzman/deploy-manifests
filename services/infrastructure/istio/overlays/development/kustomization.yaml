@@ -3,3 +3,10 @@ kind: Kustomization
 namespace: istio-system
 bases:
   - ../../base
+patches:
+- path: operator-patch.yaml
+  target:
+    group: install.istio.io
+    version: v1alpha1
+    kind: IstioOperator
+    name: istio-controlplane
