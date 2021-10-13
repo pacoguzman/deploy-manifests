@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollouts-demo
+  labels:
+    app.kubernetes.io/name: rollouts-demo-istio
+    app.kubernetes.io/instance: rollouts-demo-istio
+    app.kubernetes.io/managed-by: gitops
+    app.kubernetes.io/component: rollouts
+    app.kubernetes.io/part-of: rollouts
+spec:
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app.kubernetes.io/name: rollouts-demo-istio
