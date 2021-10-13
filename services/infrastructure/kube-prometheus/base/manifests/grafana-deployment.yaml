@@ -5,7 +5,7 @@ metadata:
     app.kubernetes.io/component: grafana
     app.kubernetes.io/name: grafana
     app.kubernetes.io/part-of: kube-prometheus
-    app.kubernetes.io/version: 8.1.5
+    app.kubernetes.io/version: 8.2.0
   name: grafana
   namespace: monitoring
 spec:
@@ -18,18 +18,18 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/grafana-config: 2307d606a1c9caa12d09bf2dea10de16
-        checksum/grafana-dashboardproviders: 27252928d79782153aa30c5aebd51fb8
-        checksum/grafana-datasources: 30e19ebb478699683b228a7c5727860f
+        checksum/grafana-config: bc42c21856164e7bfdcb92065851d0bf
+        checksum/grafana-dashboardproviders: 861f4627a6cce3eba350c4b35fb024ff
+        checksum/grafana-datasources: 54629d3d4c7daa8ec4805ede91f27f0d
       labels:
         app.kubernetes.io/component: grafana
         app.kubernetes.io/name: grafana
         app.kubernetes.io/part-of: kube-prometheus
-        app.kubernetes.io/version: 8.1.5
+        app.kubernetes.io/version: 8.2.0
     spec:
       containers:
       - env: []
-        image: grafana/grafana:8.1.5
+        image: grafana/grafana:8.2.0
         name: grafana
         ports:
         - containerPort: 3000
@@ -124,6 +124,21 @@ spec:
         - mountPath: /grafana-dashboard-definitions/0/workload-total
           name: grafana-dashboard-workload-total
           readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/istio-control-plane
+          name: grafana-dashboard-istio-control-plane
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/istio-mesh
+          name: grafana-dashboard-istio-mesh
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/istio-performance
+          name: grafana-dashboard-istio-performance
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/istio-service
+          name: grafana-dashboard-istio-service
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/istio-workload
+          name: grafana-dashboard-istio-workload
+          readOnly: false
         - mountPath: /etc/grafana
           name: grafana-config
           readOnly: false
@@ -212,6 +227,21 @@ spec:
       - configMap:
           name: grafana-dashboard-workload-total
         name: grafana-dashboard-workload-total
+      - configMap:
+          name: grafana-dashboard-istio-control-plane
+        name: grafana-dashboard-istio-control-plane
+      - configMap:
+          name: grafana-dashboard-istio-mesh
+        name: grafana-dashboard-istio-mesh
+      - configMap:
+          name: grafana-dashboard-istio-performance
+        name: grafana-dashboard-istio-performance
+      - configMap:
+          name: grafana-dashboard-istio-service
+        name: grafana-dashboard-istio-service
+      - configMap:
+          name: grafana-dashboard-istio-workload
+        name: grafana-dashboard-istio-workload
       - name: grafana-config
         secret:
           secretName: grafana-config

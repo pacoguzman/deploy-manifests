@@ -12,9 +12,19 @@ local kp =
       common+: {
         namespace: 'monitoring',
       },
-      // Additional Namespaces https://github.com/prometheus-operator/kube-prometheus#adding-additional-namespaces-to-monitor
+      // All namespaces https://github.com/prometheus-operator/kube-prometheus#monitoring-all-namespaces
       prometheus+: {
-        namespaces+: ['istio-system'],
+        namespaces+: [],
+      },
+      // Custom Dashboards https://github.com/prometheus-operator/kube-prometheus/blob/main/docs/developing-prometheus-rules-and-grafana-dashboards.md#dashboards
+      grafana+: {
+        rawDashboards+:: {
+          'istio-workload.json': (importstr 'istio/7630.json'),
+          'istio-service.json': (importstr 'istio/7636.json'),
+          'istio-mesh.json': (importstr 'istio/7639.json'),
+          'istio-control-plane.json': (importstr 'istio/7645.json'),
+          'istio-performance.json': (importstr 'istio/11829.json'),
+        },
       },
     },
   };
