@@ -4,9 +4,9 @@
     proxyStatsMatcher:
         inclusionRegexps:
           - ".*circuit_breakers.*"
+          - ".*downstream_cx.*"
+          - ".*downstream_rq.*"
         inclusionPrefixes:
-          - "downstream_cx"
-          - "downstream_rq"
           - "upstream_rq"
           - "upstream_cx"
 
